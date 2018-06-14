@@ -61,12 +61,22 @@ $(function() {
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
+        it('the menu element is hidden by default', function () {
+            expect($('body').attr('class')).toMatch('menu-hidden');
+        });
     
         /* TODO: Write a test that ensures the menu changes
          * visibility when the menu icon is clicked. This test
          * should have two expectations: does the menu display when
          * clicked and does it hide when clicked again.
          */
+        it('the menu change status', function () {
+            var menuIcon = $('.menu-icon-link');
+            menuIcon.trigger('click');
+            expect($('body').attr('class')).not.toMatch('menu-hidden');
+            menuIcon.trigger('click');
+            expect($('body').attr('class')).toMatch('menu-hidden');
+        });
     });
     
 
@@ -79,6 +89,16 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+        beforeEach(function (done) {
+            loadFeed(0, function () {
+                done();
+            });
+        });
+        
+        it('loadFeed not problem', function (done) {
+            expect($('.feed .entry-link').length).not.toBe(0);
+            done();
+        });
     });
 
     
@@ -90,6 +110,19 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        var title;
+        beforeEach(function (done) {
+            title = $('.feed .entry-link').eq(0).find('h2').html();
+            loadFeed(2, function () {
+                done();
+            });
+        });
+        
+        it('reload success', function (done) {
+            expect($('.feed .entry-link').eq(0).find('h2').html()).not.toBe(title);
+            done();
+        });
+        
     });
 
     
